@@ -7,6 +7,8 @@ import TimerControls from "@/components/timer/TimerControls";
 import Character from "@/components/companion/Character";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import AudioPlayer from "@/components/audio/AudioPlayer";
+import SessionStats from "@/components/stats/SessionStats";
+import { useTimerStore } from "@/lib/timerStore";
 
 export default function Home() {
   const { data: sessions } = useQuery({
@@ -16,6 +18,8 @@ export default function Home() {
   const { data: preferences } = useQuery({
     queryKey: ["/api/preferences"]
   });
+
+  const { isRunning } = useTimerStore();
 
   return (
     <div className="min-h-screen">
@@ -65,9 +69,12 @@ export default function Home() {
                   <Character 
                     type={preferences?.character || "cat"} 
                     size="large"
+                    state={isRunning ? "focused" : "idle"}
                   />
                 </CardContent>
               </Card>
+
+              <SessionStats />
 
               <Card className="bg-black/40 backdrop-blur pixel-border">
                 <CardHeader>
