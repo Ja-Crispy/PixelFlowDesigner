@@ -5,9 +5,10 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
 import CustomTimerDialog from "./CustomTimerDialog";
+import { useEffect } from "react";
 
 export default function TimerControls() {
-  const { isRunning, mode, duration, startTimer, pauseTimer, resetTimer, setMode } = useTimerStore();
+  const { isRunning, mode, duration, time, startTimer, pauseTimer, resetTimer, setMode } = useTimerStore();
   const { toast } = useToast();
 
   const handleModeChange = (newMode: "pomodoro" | "flow" | "52-17" | "90-15" | "custom") => {
@@ -23,27 +24,37 @@ export default function TimerControls() {
   };
 
   const handleComplete = async () => {
-    try {
-      await apiRequest("POST", "/api/sessions", {
-        duration,
-        type: mode,
-        completed: 1
-      });
+    if (time <= 0) {
+      try {
+        await apiRequest("POST", "/api/sessions", {
+          duration,
+          type: mode,
+          completed: 1
+        });
 
-      queryClient.invalidateQueries({ queryKey: ["/api/sessions/recent"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/sessions/recent"] });
 
-      toast({
-        title: "Session completed!",
-        description: "Your progress has been saved.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error saving session",
-        description: "Please try again later.",
-        variant: "destructive"
-      });
+        toast({
+          title: "Session completed!",
+          description: "Your progress has been saved.",
+        });
+      } catch (error) {
+        toast({
+          title: "Error saving session",
+          description: "Please try again later.",
+          variant: "destructive"
+        });
+      }
     }
   };
+
+  // Check for timer completion
+  useEffect(() => {
+    if (time <= 0 && isRunning) {
+      handleComplete();
+      pauseTimer();
+    }
+  }, [time, isRunning]);
 
   return (
     <div className="w-full max-w-md space-y-6">

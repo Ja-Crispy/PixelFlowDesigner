@@ -12,16 +12,18 @@ import { useTimerStore } from "@/lib/timerStore";
 
 export default function CustomTimerDialog() {
   const [minutes, setMinutes] = useState("60");
+  const [open, setOpen] = useState(false);
   const { setMode } = useTimerStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const duration = Math.max(1, Math.min(180, parseInt(minutes, 10))) * 60;
     setMode("custom", duration);
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full">
           Custom
