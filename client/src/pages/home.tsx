@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import AudioPlayer from "@/components/audio/AudioPlayer";
 import SessionStats from "@/components/stats/SessionStats";
 import { useTimerStore } from "@/lib/timerStore";
+import CharacterDialog from "@/components/companion/CharacterDialog"; // Assuming this component exists
 
 export default function Home() {
   const { data: sessions } = useQuery({
@@ -65,6 +66,10 @@ export default function Home() {
 
             <div className="space-y-8">
               <Card className="bg-black/40 backdrop-blur pixel-border">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-white">Companion</CardTitle>
+                  <CharacterDialog />
+                </CardHeader>
                 <CardContent className="pt-6 flex justify-center">
                   <Character 
                     type={preferences?.character || "cat"} 
