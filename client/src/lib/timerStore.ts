@@ -3,11 +3,11 @@ import { create } from 'zustand';
 interface TimerState {
   time: number;
   isRunning: boolean;
-  mode: 'pomodoro' | 'flow' | 'custom';
+  mode: 'pomodoro' | 'flow' | '52-17' | '90-15' | 'custom';
   duration: number;
   cycles: number;
   currentCycle: number;
-  
+
   startTimer: () => void;
   pauseTimer: () => void;
   resetTimer: () => void;
@@ -25,21 +25,22 @@ export const useTimerStore = create<TimerState>((set) => ({
 
   startTimer: () => set({ isRunning: true }),
   pauseTimer: () => set({ isRunning: false }),
-  
+
   resetTimer: () => set((state) => ({ 
     time: state.duration,
     isRunning: false,
     currentCycle: 1
   })),
-  
+
   setMode: (mode, duration) => set({ 
     mode,
     duration,
     time: duration,
     isRunning: false,
-    currentCycle: 1
+    currentCycle: 1,
+    cycles: mode === 'pomodoro' ? 4 : 1
   }),
-  
+
   tick: () => set((state) => {
     if (state.time <= 0) {
       if (state.currentCycle >= state.cycles) {

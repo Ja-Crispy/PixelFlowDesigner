@@ -10,10 +10,12 @@ export default function TimerControls() {
   const { isRunning, mode, duration, startTimer, pauseTimer, resetTimer, setMode } = useTimerStore();
   const { toast } = useToast();
 
-  const handleModeChange = (newMode: "pomodoro" | "flow" | "custom") => {
+  const handleModeChange = (newMode: "pomodoro" | "flow" | "52-17" | "90-15" | "custom") => {
     const durations = {
-      pomodoro: 1500, // 25 minutes
-      flow: 5400,     // 90 minutes
+      pomodoro: 1500,  // 25 minutes
+      flow: 5400,      // 90 minutes
+      "52-17": 3120,   // 52 minutes
+      "90-15": 5400,   // 90 minutes
     };
     if (newMode !== "custom") {
       setMode(newMode, durations[newMode]);
@@ -67,7 +69,7 @@ export default function TimerControls() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <Button
           variant={mode === "pomodoro" ? "default" : "outline"}
           className="w-full"
@@ -82,7 +84,23 @@ export default function TimerControls() {
         >
           Flow
         </Button>
-        <CustomTimerDialog />
+        <Button
+          variant={mode === "52-17" ? "default" : "outline"}
+          className="w-full"
+          onClick={() => handleModeChange("52-17")}
+        >
+          52/17
+        </Button>
+        <Button
+          variant={mode === "90-15" ? "default" : "outline"}
+          className="w-full"
+          onClick={() => handleModeChange("90-15")}
+        >
+          90/15
+        </Button>
+        <div className="col-span-2">
+          <CustomTimerDialog />
+        </div>
       </div>
     </div>
   );
