@@ -7,9 +7,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import Character from "./Character";
 
 const CHARACTERS = [
   { id: "cat", emoji: "🐱", name: "Pixel Cat" },
@@ -21,6 +22,10 @@ const CHARACTERS = [
 export default function CharacterDialog() {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+
+  const { data: preferences } = useQuery({
+    queryKey: ["/api/preferences"]
+  });
 
   const mutation = useMutation({
     mutationFn: async (character: string) => {
@@ -49,12 +54,15 @@ export default function CharacterDialog() {
           {CHARACTERS.map((char) => (
             <Button
               key={char.id}
-              variant="outline"
-              className="h-24 flex flex-col gap-2"
+              variant={preferences?.character === char.id ? "default" : "outline"}
+              className="h-32 flex flex-col gap-2 relative overflow-hidden"
               onClick={() => mutation.mutate(char.id)}
             >
-              <span className="text-2xl">{char.emoji}</span>
-              <span className="text-sm">{char.name}</span>
+              <div className="absolute inset-0 flex items-center justify-center opacity-20">
+                <Character type={char.id} size="large" />
+              </div>
+              <span className="text-2xl relative z-10">{char.emoji}</span>
+              <span className="text-sm relative z-10">{char.name}</span>
             </Button>
           ))}
         </div>
