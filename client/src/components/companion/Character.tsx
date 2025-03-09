@@ -41,30 +41,50 @@ const CHARACTER_SVGS = {
 const ANIMATIONS = {
   idle: {
     y: [0, -5, 0],
-    transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+      repeatType: "reverse"
+    }
   },
   focused: {
     scale: [1, 1.1, 1],
-    transition: { duration: 1, repeat: Infinity }
+    transition: {
+      duration: 1,
+      repeat: Infinity,
+      ease: "easeInOut",
+      repeatType: "reverse"
+    }
   },
   break: {
     rotate: [-5, 5, -5],
-    transition: { duration: 2, repeat: Infinity }
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+      repeatType: "reverse"
+    }
   },
   celebration: {
-    y: [0, -20, 0],
     scale: [1, 1.2, 1],
-    transition: { duration: 0.5, repeat: 3 }
+    y: [0, -10, 0],
+    transition: {
+      duration: 0.5,
+      repeat: 3,
+      ease: "easeInOut"
+    }
   }
 };
 
 export default function Character({ type = "cat", size = "normal", state = "idle" }: CharacterProps) {
   const svg = CHARACTER_SVGS[type as keyof typeof CHARACTER_SVGS] || CHARACTER_SVGS.cat;
-  const animation = ANIMATIONS[state];
+  const animation = ANIMATIONS[state as keyof typeof ANIMATIONS];
 
   return (
     <motion.div
       className={`text-primary ${size === "large" ? "scale-150" : ""}`}
+      initial={false}
       animate={animation}
       dangerouslySetInnerHTML={{ __html: svg }}
     />

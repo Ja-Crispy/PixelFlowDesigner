@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Session } from "@shared/schema";
+import ActivityHeatmap from "./ActivityHeatmap";
 
 interface StatsCardProps {
   title: string;
@@ -37,34 +38,38 @@ export default function SessionStats() {
   const completionRate = calculateCompletionRate(sessions);
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <StatsCard
-        title="Total Focus Time"
-        value={`${Math.round(totalMinutes)}m`}
-        description="Minutes focused"
-      />
-      <StatsCard
-        title="Sessions"
-        value={totalSessions}
-        description="Completed sessions"
-      />
-      <StatsCard
-        title="Current Streak"
-        value={`${streak}d`}
-        description="Days in a row"
-      />
-      <StatsCard
-        title="Completion Rate"
-        value={`${completionRate}%`}
-        description="Sessions finished"
-      />
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-4">
+        <StatsCard
+          title="Total Focus Time"
+          value={`${Math.round(totalMinutes)}m`}
+          description="Minutes focused"
+        />
+        <StatsCard
+          title="Sessions"
+          value={totalSessions}
+          description="Completed sessions"
+        />
+        <StatsCard
+          title="Current Streak"
+          value={`${streak}d`}
+          description="Days in a row"
+        />
+        <StatsCard
+          title="Completion Rate"
+          value={`${completionRate}%`}
+          description="Sessions finished"
+        />
+      </div>
+
+      <ActivityHeatmap />
     </div>
   );
 }
 
 function calculateStreak(sessions: Session[]): number {
   if (!sessions.length) return 0;
-  
+
   const today = new Date();
   const sortedDates = sessions
     .map(s => new Date(s.timestamp))
