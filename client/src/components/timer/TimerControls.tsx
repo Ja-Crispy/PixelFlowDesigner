@@ -4,6 +4,7 @@ import { Play, Pause, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { queryClient } from "@/lib/queryClient";
+import CustomTimerDialog from "./CustomTimerDialog";
 
 export default function TimerControls() {
   const { isRunning, mode, duration, startTimer, pauseTimer, resetTimer, setMode } = useTimerStore();
@@ -13,9 +14,10 @@ export default function TimerControls() {
     const durations = {
       pomodoro: 1500, // 25 minutes
       flow: 5400,     // 90 minutes
-      custom: 3600    // 60 minutes
     };
-    setMode(newMode, durations[newMode]);
+    if (newMode !== "custom") {
+      setMode(newMode, durations[newMode]);
+    }
   };
 
   const handleComplete = async () => {
@@ -80,13 +82,7 @@ export default function TimerControls() {
         >
           Flow
         </Button>
-        <Button
-          variant={mode === "custom" ? "default" : "outline"}
-          className="w-full"
-          onClick={() => handleModeChange("custom")}
-        >
-          Custom
-        </Button>
+        <CustomTimerDialog />
       </div>
     </div>
   );

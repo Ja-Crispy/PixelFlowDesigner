@@ -8,6 +8,29 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-gradient-to-b from-[#4a0079] via-[#ff547c] to-[#ff9b57] min-h-screen text-foreground;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-pixel tracking-wide;
+  }
+}
+
+@font-face {
+  font-family: 'PixelFont';
+  src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+}
+
+.font-pixel {
+  font-family: 'Press Start 2P', system-ui, sans-serif;
+}
+
+.pixel-shadow {
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.5));
+}
+
+.pixel-border {
+  @apply border-2 border-white/10;
+  box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.1),
+              inset -2px -2px 0px rgba(0, 0, 0, 0.25);
 }
